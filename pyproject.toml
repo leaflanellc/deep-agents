@@ -11,6 +11,8 @@ dependencies = [
     "langchain>=1.0.0a10",
     "langgraph-prebuilt>=0.7.0a2",
     "numpy<2.0",
+    "weaviate-client>=4.9.5",
+    "python-dotenv>=1.0.0",
 ]
 
 [project.optional-dependencies]

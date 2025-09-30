@@ -24,6 +24,21 @@ from .example_tools import (
     calculate_area,
     get_weather,
 )
+from .weaviate_tools import (
+    create_weaviate_collection,
+    add_documents_to_weaviate,
+    search_similar_documents,
+    hybrid_search_documents,
+    get_weaviate_collection_info,
+    list_weaviate_collections,
+    check_weaviate_connection,
+)
+from .upload_tools import (
+    process_uploaded_file,
+    extract_text_content,
+    parse_structured_data,
+    create_upload_collection,
+)
 
 __all__ = [
     # Filesystem tools
@@ -43,4 +58,17 @@ __all__ = [
     # Example tools
     "calculate_area",
     "get_weather",
+    # Weaviate tools
+    "create_weaviate_collection",
+    "add_documents_to_weaviate",
+    "search_similar_documents",
+    "hybrid_search_documents",
+    "get_weaviate_collection_info",
+    "list_weaviate_collections",
+    "check_weaviate_connection",
+    # Upload tools
+    "process_uploaded_file",
+    "extract_text_content",
+    "parse_structured_data",
+    "create_upload_collection",
 ]
