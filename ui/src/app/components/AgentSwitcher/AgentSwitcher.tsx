@@ -35,12 +35,7 @@ const AVAILABLE_AGENTS: Agent[] = [
     {
         id: "supabase_agent",
         name: "Supabase Agent",
-        description: "Knowledge base with PostgreSQL + pgvector (Recommended)"
-    },
-    {
-        id: "weaviate_agent",
-        name: "Weaviate Agent",
-        description: "Knowledge base management with Weaviate (Legacy)"
+        description: "Knowledge base with PostgreSQL + pgvector semantic search"
     }
 ];
 
