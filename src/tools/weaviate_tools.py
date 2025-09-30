@@ -55,8 +55,9 @@ class WeaviateClient:
         collection_name: str, 
         properties: List[Dict[str, Any]], 
         model: str = "Snowflake/snowflake-arctic-embed-l-v2.0",
-        dimensions: Optional[int] = None
-    ) -> bool:
+        dimensions: Optional[int] = None,
+        vectorizer: str = "text2vec-weaviate"
+    ) -> Dict[str, Any]:
         """Create a new collection with vectorization."""
         try:
             # Convert properties to Weaviate format
@@ -69,27 +70,48 @@ class WeaviateClient:
                     )
                 )
             
-            # Create collection with Weaviate Embeddings vectorization
+            # Determine which text properties to vectorize
+            text_properties = [prop["name"] for prop in properties if prop.get("data_type", "").lower() == "text"]
+            if not text_properties:
+                text_properties = ["title", "content"]  # Default fallback
+            
+            # Create collection with vectorization if model is specified
             if model and model != "none":
-                # Use Weaviate's native embedding service with Snowflake models
-                # Note: Using vectorizer_config as vector_config format is not working correctly
-                collection = self.client.collections.create(
-                    name=collection_name,
-                    properties=weaviate_properties,
-                    vectorizer_config=Configure.Vectorizer.text2vec_weaviate(
-                        model=model,
-                        vectorize_collection_name=False
+                try:
+                    # Try Weaviate Embeddings first (text2vec-weaviate)
+                    if vectorizer == "text2vec-weaviate":
+                        collection = self.client.collections.create(
+                            name=collection_name,
+                            properties=weaviate_properties,
+                            vectorizer_config=Configure.Vectorizer.text2vec_weaviate(
+                                model=model,
+                                source_properties=text_properties,
+                                vectorize_class_name=False
+                            )
+                        )
+                        return {"success": True, "vectorizer": "text2vec-weaviate", "model": model}
+                except Exception as e:
+                    # If text2vec-weaviate fails, try without vectorizer
+                    print(f"Warning: Could not create collection with text2vec-weaviate: {e}")
+                    print("Falling back to collection without vectorizer. Semantic search will not be available.")
+                    collection = self.client.collections.create(
+                        name=collection_name,
+                        properties=weaviate_properties
                     )
-                )
+                    return {
+                        "success": True, 
+                        "vectorizer": "none", 
+                        "warning": "Collection created without vectorizer. Semantic search unavailable. Consider enabling text2vec-weaviate or text2vec-transformers module on your Weaviate instance."
+                    }
             else:
+                # Explicitly no vectorizer
                 collection = self.client.collections.create(
                     name=collection_name,
                     properties=weaviate_properties
                 )
-            return True
+                return {"success": True, "vectorizer": "none"}
         except Exception as e:
-            print(f"Error creating collection: {e}")
-            return False
+            return {"success": False, "error": str(e)}
     
     def add_documents(
         self, 

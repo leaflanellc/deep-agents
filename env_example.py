@@ -31,27 +31,31 @@ def main():
     weaviate_url = os.getenv("WEAVIATE_URL")
     weaviate_key = os.getenv("WEAVIATE_API_KEY")
     openai_key = os.getenv("OPENAI_API_KEY")
+    supabase_project_id = os.getenv("SUPABASE_PROJECT_ID")
     
     print(f"ANTHROPIC_API_KEY loaded: {'✅ Yes' if anthropic_key and anthropic_key != 'your_anthropic_api_key_here' else '❌ No (using placeholder)'}")
     print(f"TAVILY_API_KEY loaded: {'✅ Yes' if tavily_key and tavily_key != 'your_tavily_api_key_here' else '❌ No (using placeholder)'}")
     print(f"WEAVIATE_URL loaded: {'✅ Yes' if weaviate_url and weaviate_url != 'your_weaviate_url_here' else '❌ No (using placeholder)'}")
     print(f"WEAVIATE_API_KEY loaded: {'✅ Yes' if weaviate_key and weaviate_key != 'your_weaviate_api_key_here' else '❌ No (using placeholder)'}")
-    print(f"OPENAI_API_KEY loaded: {'✅ Yes' if openai_key and openai_key != 'your_openai_api_key_here' else '❌ No (using placeholder)'} - Optional for Weaviate vectorization")
+    print(f"OPENAI_API_KEY loaded: {'✅ Yes' if openai_key and openai_key != 'your_openai_api_key_here' else '❌ No (using placeholder)'} - Required for Supabase embeddings")
+    print(f"SUPABASE_PROJECT_ID loaded: {'✅ Yes' if supabase_project_id and supabase_project_id != 'your_supabase_project_id_here' else '❌ No (using placeholder)'}")
     
     if not anthropic_key or anthropic_key == 'your_anthropic_api_key_here':
         print("\n⚠️  Please update your .env file with your actual API keys:")
         print("   1. Open the .env file in this directory")
         print("   2. Replace 'your_anthropic_api_key_here' with your actual Anthropic API key")
         print("   3. Replace 'your_tavily_api_key_here' with your actual Tavily API key (optional)")
-        print("   4. Replace 'your_weaviate_url_here' with your Weaviate Cloud URL")
-        print("   5. Replace 'your_weaviate_api_key_here' with your Weaviate API key")
-        print("   6. Replace 'your_openai_api_key_here' with your OpenAI API key (optional - Weaviate uses its own embeddings)")
+        print("   4. Replace 'your_weaviate_url_here' with your Weaviate Cloud URL (optional)")
+        print("   5. Replace 'your_weaviate_api_key_here' with your Weaviate API key (optional)")
+        print("   6. Replace 'your_openai_api_key_here' with your OpenAI API key (required for Supabase)")
+        print("   7. Replace 'your_supabase_project_id_here' with your Supabase project ID")
         print("\n   Example .env file content:")
         print("   ANTHROPIC_API_KEY=sk-ant-api03-...")
         print("   TAVILY_API_KEY=tvly-...")
         print("   WEAVIATE_URL=https://your-cluster-url.weaviate.network")
         print("   WEAVIATE_API_KEY=your-weaviate-api-key")
         print("   OPENAI_API_KEY=sk-...")
+        print("   SUPABASE_PROJECT_ID=hwssdopejehykwvaezwv")
         return
     
     # Create agent with custom tools

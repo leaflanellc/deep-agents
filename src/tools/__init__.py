@@ -33,6 +33,14 @@ from .weaviate_tools import (
     list_weaviate_collections,
     check_weaviate_connection,
 )
+from .supabase_tools import (
+    create_supabase_collection,
+    add_documents_to_supabase,
+    search_similar_supabase_documents,
+    get_supabase_collection_info,
+    list_supabase_collections,
+    check_supabase_connection,
+)
 from .upload_tools import (
     process_uploaded_file,
     extract_text_content,
@@ -66,6 +74,13 @@ __all__ = [
     "get_weaviate_collection_info",
     "list_weaviate_collections",
     "check_weaviate_connection",
+    # Supabase tools
+    "create_supabase_collection",
+    "add_documents_to_supabase",
+    "search_similar_supabase_documents",
+    "get_supabase_collection_info",
+    "list_supabase_collections",
+    "check_supabase_connection",
     # Upload tools
     "process_uploaded_file",
     "extract_text_content",
