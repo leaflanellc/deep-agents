@@ -65,7 +65,7 @@ agent = create_deep_agent(
 result = agent.invoke({"messages": [{"role": "user", "content": "what is langgraph?"}]})
 ```
 
-See [examples/research/research_agent.py](examples/research/research_agent.py) for a more complex example.
+See `src/agents/research_agent.py` for a more complex example.
 
 The agent created with `create_deep_agent` is just a LangGraph graph - so you can interact with it (streaming, human-in-the-loop, memory, studio)
 in the same way you would any LangGraph agent.
@@ -431,4 +431,4 @@ asyncio.run(main())
 - [ ] Code cleanliness (type hinting, docstrings, formating)
 - [ ] Allow for more of a robust virtual filesystem
 - [ ] Create an example of a deep coding agent built on top of this
-- [ ] Benchmark the example of [deep research agent](examples/research/research_agent.py)
+- [ ] Benchmark the example of [deep research agent](src/agents/research_agent.py)

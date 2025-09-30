@@ -1,29 +1,9 @@
-import os
-from typing import Literal
-
-from tavily import TavilyClient
+"""
+Research agent for conducting thorough research and writing reports.
+"""
 
 from deepagents import create_deep_agent
-
-# It's best practice to initialize the client once and reuse it.
-tavily_client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
-
-# Search tool to use to do research
-def internet_search(
-    query: str,
-    max_results: int = 5,
-    topic: Literal["general", "news", "finance"] = "general",
-    include_raw_content: bool = False,
-):
-    """Run a web search"""
-    search_docs = tavily_client.search(
-        query,
-        max_results=max_results,
-        include_raw_content=include_raw_content,
-        topic=topic,
-    )
-    return search_docs
-
+from tools.research_tools import internet_search
 
 sub_research_prompt = """You are a dedicated researcher. Your job is to conduct research based on the users questions.
 
@@ -65,7 +45,6 @@ critique_sub_agent = {
     "description": "Used to critique the final report. Give this agent some information about how you want it to critique the report.",
     "prompt": sub_critique_prompt,
 }
-
 
 # Prompt prefix to steer the agent to be an expert researcher
 research_instructions = """You are an expert researcher. Your job is to conduct thorough research, and then write a polished report.
