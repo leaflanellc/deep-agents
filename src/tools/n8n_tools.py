@@ -110,7 +110,7 @@ def create_workflow(name: str, nodes: List[Dict], connections: Dict, settings: O
         nodes: List of node definitions. Each node should have: name, type, parameters, position.
         connections: Dictionary defining connections between nodes.
         settings: Optional workflow settings (timezone, saveExecutionProgress, etc).
-        active: Whether to activate the workflow immediately.
+        active: Whether to activate the workflow immediately (will be set after creation).
         tags: Optional list of tag names to assign to the workflow.
     
     Returns:
@@ -119,11 +119,11 @@ def create_workflow(name: str, nodes: List[Dict], connections: Dict, settings: O
     try:
         url = f"{N8N_BASE_URL}/workflows"
         
+        # Note: 'active' is read-only and cannot be set during creation
         workflow_data = {
             'name': name,
             'nodes': nodes,
             'connections': connections,
-            'active': active,
             'settings': settings or {},
         }
         
@@ -132,6 +132,14 @@ def create_workflow(name: str, nodes: List[Dict], connections: Dict, settings: O
         
         response = requests.post(url, headers=_get_headers(), json=workflow_data)
         data = _handle_response(response)
+        
+        # If active=True was requested, activate the workflow after creation
+        if active and 'id' in data:
+            workflow_id = data['id']
+            activate_result = activate_workflow(workflow_id, active=True)
+            # Update the data with activated status
+            if not activate_result.startswith("Error"):
+                data['active'] = True
         
         return json.dumps(data, indent=2)
     except Exception as e:

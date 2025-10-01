@@ -64,11 +64,26 @@ Create a specialized agent for managing, designing, and testing n8n workflows pr
 - ✅ Set n8n_agent as default agent
 - ✅ Update agentThreadIds to include all agents
 
-### Phase 5: Testing & Validation ⏳
+### Phase 5: Enhancements ✅
+- ✅ Fixed `active` field read-only error in create_workflow
+- ✅ Increased recursion limit from 25 to 100
+- ✅ Added AI Agent workflow guidance to system prompt
+- ✅ Set default model to gpt-4o-mini with "openai account" credentials
+- ✅ Provided example AI Agent workflow structure
+- ✅ **CRITICAL FIX**: Discovered correct AI model connection pattern
+  - Node type: `@n8n/n8n-nodes-langchain.lmChatOpenAi` (not chatOpenAi)
+  - Connection type: `"ai_languageModel"` (special connection, NOT "main")
+  - Model parameter structure uses `__rl`, `mode`, `value` format
+- ✅ Added clear instructions to NEVER auto-activate workflows
+- ✅ Added guidance to test workflows manually in n8n UI
+- ✅ Updated example to show correct ai_languageModel connection pattern
+
+### Phase 6: Testing & Validation ⏳
 - Test listing workflows
 - Test workflow creation and updates
 - Test execution and result interpretation
 - Validate agent responses
+- Test AI Agent workflow creation
 
 ## Technical Details
 
