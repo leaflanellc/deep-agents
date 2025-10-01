@@ -10,14 +10,8 @@ This agent has deep knowledge of n8n workflow automation and can:
 - Provide n8n best practices and guidance
 """
 
-from typing import Any
-from langchain_core.messages import SystemMessage
-from langchain_core.runnables import RunnableConfig
-
-from src.deepagents.graph import create_react_agent
-from src.deepagents.model import get_model
-from src.deepagents.state import AgentState
-from src.tools.n8n_tools import (
+from deepagents import create_deep_agent
+from tools.n8n_tools import (
     list_workflows,
     get_workflow,
     create_workflow,
@@ -134,11 +128,9 @@ ensure the JSON structure is valid and complete. When testing, interpret executi
 results clearly and suggest improvements."""
 
 
-def create_n8n_agent():
-    """Create and return the n8n agent."""
-    
-    # Gather all n8n tools
-    tools = [
+# Create the n8n agent with all tools
+agent = create_deep_agent(
+    tools=[
         list_workflows,
         get_workflow,
         create_workflow,
@@ -150,36 +142,9 @@ def create_n8n_agent():
         get_execution_details,
         get_credentials,
         search_node_types
-    ]
-    
-    # Create the agent with specialized system prompt
-    agent = create_react_agent(
-        model=get_model(),
-        tools=tools,
-        state_modifier=N8N_SYSTEM_PROMPT
-    )
-    
-    return agent
+    ],
+    instructions=N8N_SYSTEM_PROMPT
+)
 
-
-async def run_n8n_agent(state: AgentState, config: RunnableConfig) -> dict[str, Any]:
-    """
-    Run the n8n agent with the given state and configuration.
-    
-    Args:
-        state: Current agent state including messages
-        config: Runtime configuration
-        
-    Returns:
-        Dictionary with updated messages
-    """
-    agent = create_n8n_agent()
-    result = await agent.ainvoke(state, config)
-    return result
-
-
-# For use in server/routing
-n8n_agent = create_n8n_agent()
-
-__all__ = ['create_n8n_agent', 'run_n8n_agent', 'n8n_agent', 'N8N_SYSTEM_PROMPT']
+__all__ = ['agent']
 
