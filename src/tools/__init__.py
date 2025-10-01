@@ -47,6 +47,25 @@ from .upload_tools import (
     parse_structured_data,
     create_upload_collection,
 )
+from .database_tools import (
+    create_database_table,
+    insert_database_data,
+    query_database,
+    list_database_tables,
+    get_table_schema,
+    execute_database_sql,
+    check_database_connection,
+)
+from .prompt_tools import (
+    create_prompt_template,
+    get_prompt_template,
+    list_prompt_templates,
+    update_prompt_template,
+    delete_prompt_template,
+    search_prompt_templates,
+    get_prompt_categories,
+    use_prompt_template,
+)
 
 __all__ = [
     # Filesystem tools
@@ -86,4 +105,21 @@ __all__ = [
     "extract_text_content",
     "parse_structured_data",
     "create_upload_collection",
+    # Database tools
+    "create_database_table",
+    "insert_database_data",
+    "query_database",
+    "list_database_tables",
+    "get_table_schema",
+    "execute_database_sql",
+    "check_database_connection",
+    # Prompt tools
+    "create_prompt_template",
+    "get_prompt_template",
+    "list_prompt_templates",
+    "update_prompt_template",
+    "delete_prompt_template",
+    "search_prompt_templates",
+    "get_prompt_categories",
+    "use_prompt_template",
 ]

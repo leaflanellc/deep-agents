@@ -4,6 +4,15 @@ Research agent for conducting thorough research and writing reports.
 
 from deepagents import create_deep_agent
 from tools.research_tools import internet_search
+from tools.database_tools import (
+    create_database_table,
+    insert_database_data,
+    query_database,
+    list_database_tables,
+    get_table_schema,
+    execute_database_sql,
+    check_database_connection,
+)
 
 sub_research_prompt = """You are a dedicated researcher. Your job is to conduct research based on the users questions.
 
@@ -46,12 +55,58 @@ critique_sub_agent = {
     "prompt": sub_critique_prompt,
 }
 
+sub_database_prompt = """You are a dedicated database manager. Your job is to help with database operations for research data.
+
+You can:
+- Create tables to store research data with appropriate schemas
+- Insert research findings and data into database tables
+- Query the database to retrieve specific information
+- List existing tables and their schemas
+- Execute SQL queries to analyze data
+
+When creating tables for research data, use these standard fields:
+- id: INTEGER PRIMARY KEY (auto-generated)
+- title: TEXT (main title of the research item)
+- content: TEXT (main content or findings)
+- topic: TEXT (research topic or category)
+- source: TEXT (source URL or reference)
+- difficulty: TEXT (Beginner/Intermediate/Advanced)
+- tags: TEXT (comma-separated tags)
+- created_at: TEXT (timestamp, auto-generated)
+
+You can also add custom fields as needed for specific research projects.
+
+Always provide clear feedback about database operations and explain what data is being stored or retrieved.
+
+Only your FINAL answer will be passed on to the user. They will have NO knowledge of anything except your final message, so your final response should be your final message!"""
+
+database_sub_agent = {
+    "name": "database-agent",
+    "description": "Used to manage local database operations for storing and querying research data. Use this agent to create tables, insert research findings, and query data.",
+    "prompt": sub_database_prompt,
+    "tools": [
+        create_database_table,
+        insert_database_data,
+        query_database,
+        list_database_tables,
+        get_table_schema,
+        execute_database_sql,
+        check_database_connection,
+    ],
+}
+
 # Prompt prefix to steer the agent to be an expert researcher
 research_instructions = """You are an expert researcher. Your job is to conduct thorough research, and then write a polished report.
 
 The first thing you should do is to write the original user question to `question.txt` so you have a record of it.
 
 Use the research-agent to conduct deep research. It will respond to your questions/topics with a detailed answer.
+
+You can use the database-agent to store research findings in a local database. This is useful for:
+- Storing research data for later analysis
+- Creating structured tables for different research topics
+- Querying and analyzing collected data
+- Organizing research findings by topic, source, or other criteria
 
 When you think you enough information to write a final report, write it to `final_report.md`
 
@@ -140,5 +195,5 @@ Use this to run an internet search for a given query. You can specify the number
 agent = create_deep_agent(
     tools=[internet_search],
     instructions=research_instructions,
-    subagents=[critique_sub_agent, research_sub_agent],
+    subagents=[critique_sub_agent, research_sub_agent, database_sub_agent],
 ).with_config({"recursion_limit": 1000})

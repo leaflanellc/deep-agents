@@ -18,14 +18,14 @@ interface AgentSwitcherProps {
 
 const AVAILABLE_AGENTS: Agent[] = [
     {
-        id: "simple_agent",
-        name: "Simple Agent",
-        description: "Basic math and weather assistant"
-    },
-    {
         id: "research_agent",
         name: "Research Agent",
         description: "Advanced research with web search capabilities"
+    },
+    {
+        id: "simple_agent",
+        name: "Simple Agent",
+        description: "Basic math and weather assistant"
     },
     {
         id: "coding_agent",

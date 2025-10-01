@@ -25,7 +25,7 @@ export function useChat(
   const accessToken = session?.accessToken;
 
   const agentId = useMemo(() => {
-    const selectedAgentId = currentAgentId || "simple_agent";
+    const selectedAgentId = currentAgentId || "research_agent";
     console.log("Selected agent ID:", selectedAgentId);
     return selectedAgentId;
   }, [currentAgentId]);

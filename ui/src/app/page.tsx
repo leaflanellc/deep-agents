@@ -16,7 +16,7 @@ import styles from "./page.module.scss";
 export default function HomePage() {
   const { session } = useAuthContext();
   const [threadId, setThreadId] = useQueryState("threadId");
-  const [currentAgent, setCurrentAgent] = useState<string>("simple_agent");
+  const [currentAgent, setCurrentAgent] = useState<string>("research_agent");
   const [selectedSubAgent, setSelectedSubAgent] = useState<SubAgent | null>(
     null,
   );
@@ -29,8 +29,8 @@ export default function HomePage() {
 
   // Store thread IDs per agent
   const [agentThreadIds, setAgentThreadIds] = useState<Record<string, string | null>>({
-    simple_agent: null,
     research_agent: null,
+    simple_agent: null,
     coding_agent: null,
   });
 
