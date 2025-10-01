@@ -16,7 +16,7 @@ import styles from "./page.module.scss";
 export default function HomePage() {
   const { session } = useAuthContext();
   const [threadId, setThreadId] = useQueryState("threadId");
-  const [currentAgent, setCurrentAgent] = useState<string>("research_agent");
+  const [currentAgent, setCurrentAgent] = useState<string>("n8n_agent");
   const [selectedSubAgent, setSelectedSubAgent] = useState<SubAgent | null>(
     null,
   );
@@ -32,6 +32,8 @@ export default function HomePage() {
     research_agent: null,
     simple_agent: null,
     coding_agent: null,
+    weaviate_agent: null,
+    n8n_agent: null,
   });
 
   // Initialize agent thread IDs from URL parameter on first load

@@ -10,10 +10,12 @@ import {
   CheckCircle,
   Circle,
   Clock,
+  Zap,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
+import { PromptManager } from "../PromptManager/PromptManager";
 import type { TodoItem, FileItem } from "../../types/types";
 import styles from "./TasksFilesSidebar.module.scss";
 
@@ -81,6 +83,10 @@ export const TasksFilesSidebar = React.memo<TasksFilesSidebarProps>(
             </TabsTrigger>
             <TabsTrigger value="files" className={styles.tabTrigger}>
               Files ({Object.keys(files).length})
+            </TabsTrigger>
+            <TabsTrigger value="prompts" className={styles.tabTrigger}>
+              <Zap size={14} />
+              Prompts
             </TabsTrigger>
           </TabsList>
 
@@ -162,6 +168,10 @@ export const TasksFilesSidebar = React.memo<TasksFilesSidebarProps>(
                 </div>
               )}
             </ScrollArea>
+          </TabsContent>
+
+          <TabsContent value="prompts" className={styles.tabContent}>
+            <PromptManager />
           </TabsContent>
         </Tabs>
       </div>

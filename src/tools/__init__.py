@@ -66,6 +66,36 @@ from .prompt_tools import (
     get_prompt_categories,
     use_prompt_template,
 )
+from .system_refinement_tools import (
+    analyze_system_performance,
+    research_agent_best_practices,
+    generate_improved_system_prompt,
+    save_system_prompt_override,
+    get_system_prompt_override,
+    list_system_prompt_overrides,
+    remove_system_prompt_override,
+)
+from .evaluation_tools import (
+    evaluate_agent_performance,
+    should_trigger_system_refinement,
+    add_evaluation_tasks_to_todos,
+    schedule_evaluation_pause,
+    monitor_system_health,
+    get_performance_trends,
+)
+from .n8n_tools import (
+    list_workflows,
+    get_workflow,
+    create_workflow,
+    update_workflow,
+    delete_workflow,
+    activate_workflow,
+    execute_workflow,
+    get_executions,
+    get_execution_details,
+    get_credentials,
+    search_node_types,
+)
 
 __all__ = [
     # Filesystem tools
@@ -122,4 +152,31 @@ __all__ = [
     "search_prompt_templates",
     "get_prompt_categories",
     "use_prompt_template",
+    # System refinement tools
+    "analyze_system_performance",
+    "research_agent_best_practices",
+    "generate_improved_system_prompt",
+    "save_system_prompt_override",
+    "get_system_prompt_override",
+    "list_system_prompt_overrides",
+    "remove_system_prompt_override",
+    # Evaluation tools
+    "evaluate_agent_performance",
+    "should_trigger_system_refinement",
+    "add_evaluation_tasks_to_todos",
+    "schedule_evaluation_pause",
+    "monitor_system_health",
+    "get_performance_trends",
+    # n8n tools
+    "list_workflows",
+    "get_workflow",
+    "create_workflow",
+    "update_workflow",
+    "delete_workflow",
+    "activate_workflow",
+    "execute_workflow",
+    "get_executions",
+    "get_execution_details",
+    "get_credentials",
+    "search_node_types",
 ]

@@ -3,6 +3,7 @@ Research agent for conducting thorough research and writing reports.
 """
 
 from deepagents import create_deep_agent
+from deepagents.evaluation_middleware import create_evaluation_middleware
 from tools.research_tools import internet_search
 from tools.database_tools import (
     create_database_table,
@@ -12,6 +13,33 @@ from tools.database_tools import (
     get_table_schema,
     execute_database_sql,
     check_database_connection,
+)
+from tools.prompt_tools import (
+    create_prompt_template,
+    get_prompt_template,
+    list_prompt_templates,
+    update_prompt_template,
+    delete_prompt_template,
+    search_prompt_templates,
+    get_prompt_categories,
+    use_prompt_template,
+)
+from tools.system_refinement_tools import (
+    analyze_system_performance,
+    research_agent_best_practices,
+    generate_improved_system_prompt,
+    save_system_prompt_override,
+    get_system_prompt_override,
+    list_system_prompt_overrides,
+    remove_system_prompt_override,
+)
+from tools.evaluation_tools import (
+    evaluate_agent_performance,
+    should_trigger_system_refinement,
+    add_evaluation_tasks_to_todos,
+    schedule_evaluation_pause,
+    monitor_system_health,
+    get_performance_trends,
 )
 
 sub_research_prompt = """You are a dedicated researcher. Your job is to conduct research based on the users questions.
@@ -95,6 +123,157 @@ database_sub_agent = {
     ],
 }
 
+sub_prompt_prompt = """You are a dedicated prompt manager. Your job is to help with prompt template management and usage.
+
+You can:
+- Create new prompt templates with names, descriptions, content, categories, and tags
+- Retrieve existing prompt templates by name
+- List all available prompt templates with optional filtering
+- Update existing prompt templates (name, description, content, category, tags)
+- Delete prompt templates that are no longer needed
+- Search for prompt templates by content or tags
+- Get available categories for organizing prompts
+- Use prompt templates with variable substitution
+
+When creating prompt templates:
+- Use descriptive names that clearly indicate the purpose
+- Provide helpful descriptions explaining when to use the prompt
+- Use {variable} syntax for dynamic content that can be substituted
+- Choose appropriate categories (research, coding, writing, analysis, general)
+- Add relevant tags for better organization and searchability
+
+When using prompt templates:
+- Substitute variables with actual values when provided
+- Return the processed prompt content ready for use
+- Explain what variables were substituted
+
+Always provide clear feedback about prompt operations and explain what was created, updated, or retrieved.
+
+Only your FINAL answer will be passed on to the user. They will have NO knowledge of anything except your final message, so your final response should be your final message!"""
+
+prompt_sub_agent = {
+    "name": "prompt-agent",
+    "description": "Used to manage prompt templates for research and other tasks. Use this agent to create, update, search, and use prompt templates.",
+    "prompt": sub_prompt_prompt,
+    "tools": [
+        create_prompt_template,
+        get_prompt_template,
+        list_prompt_templates,
+        update_prompt_template,
+        delete_prompt_template,
+        search_prompt_templates,
+        get_prompt_categories,
+        use_prompt_template,
+    ],
+}
+
+sub_system_refinement_prompt = """You are a dedicated system refinement specialist. Your job is to research, analyze, and improve the agent system's performance and prompts.
+
+You can:
+- Analyze current system performance and identify improvement areas
+- Research best practices for AI agent system design and prompt engineering
+- Generate improved system prompts based on analysis and research
+- Save system prompt overrides to improve agent performance
+- Monitor and track system prompt changes over time
+
+When analyzing system performance:
+- Look for patterns in errors, inefficiencies, and user feedback
+- Identify specific areas where prompts could be improved
+- Consider both immediate fixes and long-term improvements
+
+When researching best practices:
+- Focus on current literature and proven techniques
+- Look for methods that apply to our specific use cases
+- Consider both academic research and practical implementations
+
+When generating improvements:
+- Base changes on concrete performance data and research findings
+- Test improvements before applying them broadly
+- Document the reasoning behind each change
+- Consider the impact on different agent types and use cases
+
+When saving overrides:
+- Only save changes that have been validated and tested
+- Include clear reasoning for why the change was made
+- Set appropriate confidence scores based on evidence
+- Monitor the impact of changes over time
+
+Always provide clear feedback about what was analyzed, researched, and improved.
+
+Only your FINAL answer will be passed on to the user. They will have NO knowledge of anything except your final message, so your final response should be your final message!"""
+
+system_refinement_sub_agent = {
+    "name": "system-refinement-agent",
+    "description": "Used to research, analyze, and improve system performance and prompts. Use this agent to refine system prompts based on performance data and best practices.",
+    "prompt": sub_system_refinement_prompt,
+    "tools": [
+        analyze_system_performance,
+        research_agent_best_practices,
+        generate_improved_system_prompt,
+        save_system_prompt_override,
+        get_system_prompt_override,
+        list_system_prompt_overrides,
+        remove_system_prompt_override,
+    ],
+}
+
+sub_evaluation_prompt = """You are a dedicated performance evaluation specialist. Your job is to monitor, evaluate, and trigger system improvements based on agent performance.
+
+You can:
+- Evaluate agent performance against defined criteria
+- Check if system refinement should be triggered
+- Add evaluation tasks to agent todo lists
+- Schedule evaluation pauses for comprehensive assessment
+- Monitor overall system health and performance trends
+
+When evaluating performance:
+- Use objective metrics and criteria
+- Consider both quantitative and qualitative factors
+- Look for trends and patterns over time
+- Identify specific areas needing improvement
+
+When determining if refinement is needed:
+- Check performance against thresholds
+- Consider time since last refinement
+- Look for degradation trends
+- Balance improvement needs with system stability
+
+When adding evaluation tasks:
+- Prioritize tasks based on impact and urgency
+- Make tasks specific and actionable
+- Consider the agent's current workload
+- Focus on measurable improvements
+
+When scheduling evaluation pauses:
+- Plan comprehensive assessments when needed
+- Consider system load and user impact
+- Schedule during appropriate times
+- Ensure sufficient time for thorough evaluation
+
+When monitoring system health:
+- Track key performance indicators
+- Identify potential issues early
+- Provide actionable recommendations
+- Maintain system stability and reliability
+
+Always provide clear, data-driven recommendations and ensure evaluation activities don't disrupt normal operations.
+
+Only your FINAL answer will be passed on to the user. They will have NO knowledge of anything except your final message, so your final response should be your final message!"""
+
+evaluation_sub_agent = {
+    "name": "evaluation-agent",
+    "description": "Used to monitor, evaluate, and trigger system improvements. Use this agent to assess performance and schedule refinement activities.",
+    "prompt": sub_evaluation_prompt,
+    "tools": [
+        evaluate_agent_performance,
+        should_trigger_system_refinement,
+        add_evaluation_tasks_to_todos,
+        schedule_evaluation_pause,
+        monitor_system_health,
+        get_performance_trends,
+    ],
+}
+
 # Prompt prefix to steer the agent to be an expert researcher
 research_instructions = """You are an expert researcher. Your job is to conduct thorough research, and then write a polished report.
 
@@ -107,6 +286,24 @@ You can use the database-agent to store research findings in a local database. T
 - Creating structured tables for different research topics
 - Querying and analyzing collected data
 - Organizing research findings by topic, source, or other criteria
+
+You can use the prompt-agent to manage prompt templates for research and other tasks. This is useful for:
+- Creating reusable prompt templates for common research tasks
+- Storing and organizing prompts by category and tags
+- Using prompt templates with variable substitution
+- Managing a library of effective prompts for different research scenarios
+
+You can use the system-refinement-agent to research and improve system performance. This is useful for:
+- Analyzing system performance and identifying improvement areas
+- Researching best practices for AI agent design and prompt engineering
+- Generating improved system prompts based on performance data
+- Implementing system prompt overrides to enhance performance
+
+You can use the evaluation-agent to monitor performance and trigger improvements. This is useful for:
+- Evaluating agent performance against defined criteria
+- Determining when system refinement is needed
+- Adding evaluation tasks to maintain system quality
+- Scheduling comprehensive evaluation pauses when needed
 
 When you think you enough information to write a final report, write it to `final_report.md`
 
@@ -191,9 +388,17 @@ You have access to a few tools.
 Use this to run an internet search for a given query. You can specify the number of results, the topic, and whether raw content should be included.
 """
 
+# Create evaluation middleware
+evaluation_middleware = create_evaluation_middleware(
+    evaluation_interval_hours=24,
+    performance_threshold=0.8,
+    auto_trigger_refinement=True
+)
+
 # Create the agent
 agent = create_deep_agent(
     tools=[internet_search],
     instructions=research_instructions,
-    subagents=[critique_sub_agent, research_sub_agent, database_sub_agent],
+    subagents=[critique_sub_agent, research_sub_agent, database_sub_agent, prompt_sub_agent, system_refinement_sub_agent, evaluation_sub_agent],
+    middleware=[evaluation_middleware],
 ).with_config({"recursion_limit": 1000})

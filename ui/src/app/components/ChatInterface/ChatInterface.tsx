@@ -12,11 +12,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send, LoaderCircle, Bot } from "lucide-react";
 import { ChatMessage } from "../ChatMessage/ChatMessage";
+import { PromptSelector } from "../PromptSelector/PromptSelector";
 import type { SubAgent, TodoItem, ToolCall } from "../../types/types";
 import { useChat } from "../../hooks/useChat";
 import styles from "./ChatInterface.module.scss";
 import { Message } from "@langchain/langgraph-sdk";
 import { extractStringFromMessageContent } from "../../utils/utils";
+import { PromptTemplate } from "../PromptManager/PromptManager";
 
 interface ChatInterfaceProps {
   threadId: string | null;
@@ -75,6 +77,13 @@ export const ChatInterface = React.memo<ChatInterfaceProps>(
         }
       },
       [input, isLoading, sendMessage],
+    );
+
+    const handleSelectPrompt = useCallback(
+      (prompt: PromptTemplate) => {
+        setInput(prompt.content);
+      },
+      [],
     );
 
 
@@ -206,13 +215,19 @@ export const ChatInterface = React.memo<ChatInterfaceProps>(
           </div>
         </div>
         <form onSubmit={handleSubmit} className={styles.inputForm}>
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
-            disabled={isLoading}
-            className={styles.input}
-          />
+          <div className={styles.inputContainer}>
+            <PromptSelector
+              onSelectPrompt={handleSelectPrompt}
+              className={styles.promptSelector}
+            />
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type your message..."
+              disabled={isLoading}
+              className={styles.input}
+            />
+          </div>
           {isLoading ? (
             <Button
               type="button"

@@ -6,7 +6,8 @@
         "simple_agent": "./server/simple_agent_server.py:agent",
         "research_agent": "./src/agents/research_agent.py:agent",
         "coding_agent": "./src/agents/coding_agent.py:agent",
-        "weaviate_agent": "./src/agents/weaviate_agent.py:agent"
+        "weaviate_agent": "./src/agents/weaviate_agent.py:agent",
+        "n8n_agent": "./src/agents/n8n_agent.py:n8n_agent"
     },
     "env": ".env"
 }

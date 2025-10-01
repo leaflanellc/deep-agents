@@ -31,6 +31,16 @@ const AVAILABLE_AGENTS: Agent[] = [
         id: "coding_agent",
         name: "Coding Agent",
         description: "Code assistance, debugging, and reviews"
+    },
+    {
+        id: "weaviate_agent",
+        name: "Weaviate Agent",
+        description: "Vector database management and semantic search"
+    },
+    {
+        id: "n8n_agent",
+        name: "n8n Agent",
+        description: "Workflow automation - list, design, edit, and test n8n workflows"
     }
 ];
 
