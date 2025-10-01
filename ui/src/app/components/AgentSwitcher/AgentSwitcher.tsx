@@ -31,11 +31,6 @@ const AVAILABLE_AGENTS: Agent[] = [
         id: "coding_agent",
         name: "Coding Agent",
         description: "Code assistance, debugging, and reviews"
-    },
-    {
-        id: "supabase_agent",
-        name: "Supabase Agent",
-        description: "Knowledge base with PostgreSQL + pgvector semantic search"
     }
 ];
 

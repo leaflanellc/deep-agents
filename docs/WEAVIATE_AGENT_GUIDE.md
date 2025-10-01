@@ -243,3 +243,4 @@ See the following example files:
 6. **Search**: Explore your knowledge base with semantic search
 
 The Weaviate Agent is now ready to help you build and manage comprehensive knowledge bases!
+
